@@ -5,6 +5,10 @@ package jukebox;
  */
 
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
@@ -23,14 +27,20 @@ import javazoom.jl.player.advanced.AdvancedPlayer;
 /*   If you don't have javazoom.jar in your project, you can download it from here: http://bit.ly/javazoom
  *   Right click your project and add it as a JAR (Under Java Build Path > Libraries).*/
 
-public class Jukebox implements Runnable {
-
+public class Jukebox implements Runnable, ActionListener {
+	JButton song1=new JButton();
+	JButton song2=new JButton();	
+	Song s=new Song("BongoCat.mp3");
+		Song s1=new Song("Ghost.mp3");
+	public static void main(String[] args) {
+		
+	}
     public void run() {
 
 		// 1. Find an mp3 on your computer or on the Internet.
 		// 2. Create a Song object for that mp3
-new Song("iPhone.mp3");
-new Song("");
+new Song("BongoCat.mp3");
+new Song("Ghost.mp3");
 		// 3. Play the Song
 
 		/*
@@ -41,12 +51,17 @@ new Song("");
 		 * that was selected.
 		 */
 JFrame frame=new JFrame();
+
+frame.setVisible(true);
 JPanel panel=new JPanel();
 frame.add(panel);
-JButton song1=new JButton();
-JButton song2=new JButton();
 panel.add(song1);
 panel.add(song2);
+song1.addActionListener(this);
+song2.addActionListener(this);
+song1.setText("BongoCat");
+song2.setText("Ghost");
+frame.pack();
     }
     
     
@@ -56,7 +71,23 @@ panel.add(song2);
 		Icon icon = new ImageIcon(imageURL);
 		return new JLabel(icon);
 	}
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
 
+		if(e.getSource()==song1) {
+			s1.stop();
+			s.play();
+		}
+		else if(e.getSource()==song2) {
+			s.stop();
+			s1.play();
+		}
+		
+	}
+
+
+	
 }
 
 class Song {
@@ -65,6 +96,7 @@ class Song {
 	private String songAddress;
 	private AdvancedPlayer mp3Player;
 	private InputStream songStream;
+	
 
 	/**
 	 * Songs can be constructed from files on your computer or Internet
