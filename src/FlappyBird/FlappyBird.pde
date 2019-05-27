@@ -1,19 +1,19 @@
 int birdX=35;
 int birdY=250;
-int birdYVelocity=30;
+int birdYVelocity=90;
 int gravity=1;
-int upperPipeHeight = (int) random(100, 400);
-int lowerPipeHeight = (int) random(100, 400);
+int upperPipeHeight = (int) random(100, 200);
+int lowerPipeHeight = 250;
 int upperPipeWidth=100;
 int lowerPipeWidth=100;
 int pipeGap=300;
 int pipeX=250;
 int upperY=0;
-int lowerY=500;
+int lowerY = 600- lowerPipeHeight;
 int score=0;
 boolean GameEnd(){
   rect(0, 500, 500, 1);
-  if(birdY==500){
+  if(birdY>=500){
     return true;
 }
 else{
@@ -26,17 +26,21 @@ fill(#37EA11);
 stroke(#114CEA);
 ellipse(birdX, birdY, 35, 35);
 birdY++;
-birdYVelocity++;
-rect(pipeX,0, 100, 100);
+rect(pipeX, upperY, upperPipeWidth, upperPipeHeight);
+rect(pipeX, lowerY, lowerPipeWidth, lowerPipeHeight);
+println(upperPipeHeight);
+pipeX++;
 teleportPipes();
-rect(pipeX, 500, 100, 400);
-pipeX = upperY + upperPipeHeight + pipeGap;
-if(birdX==pipeGap && birdY==pipeGap){
-  score++;
+intersectsPipes();
+GameEnd();
+if(GameEnd()==true){
+  stop();
+}
+if(intersectsPipes()==true){
+  stop();
 }
 text(score, 100, 100);
 }
-
 void setup(){
   size(500,500);
 }
@@ -46,18 +50,21 @@ void mousePressed(){
 }
 
 void teleportPipes(){
-  pipeX++;
   if(pipeX>=500){
-    pipeX=0;
-  }
+    pipeX=0-upperPipeWidth;
+    score++;
+     upperPipeHeight = (int) random(100, 200);
+   
+ }
 }
 
 
 
 boolean intersectsPipes() { 
-     if (birdY < upperPipeHeight && birdX > upperPipeWidth && birdX < (pipeX+upperPipeWidth)){
+     if (birdY < upperPipeHeight && birdX > pipeX && birdX < (pipeX+upperPipeWidth)){
           return true; }
-     else if (birdY>lowerPipeHeight && birdX > pipeX && birdX < (pipeX+lowerPipeWidth)) {
+     else if (birdY>lowerY && birdX > pipeX && birdX < (pipeX+lowerPipeWidth)) {
           return true; }
-     else { return false; }
+     else { return false; 
+     }
 }
